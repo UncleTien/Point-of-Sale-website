@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/admin.cshtml";
+
+}
+
+@model List<User>
+
+<h1>Quản lý nhân viên bán hàng</h1>
+
+<a asp-controller="Account" asp-action="Register" class="btn btn-primary">Tạo tài khoản</a>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên đăng nhập</th>
+            <th>Tên đầy đủ</th>
+            <th>Email</th>
+            <th>Điện thoại</th>
+            <th>Đặt lại mật khẩu</th>
+            <th>Actions</th>
+            <th>Lock/Unlock</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@customer.Id</td>
+                <td>@customer.Username</td>
+                <td>@customer.FullName</td>
+                <td>@customer.Email</td>
+                <td>@customer.Phone</td>
+                <td>
+                    <a asp-action="ResetPassword" asp-route-id="@customer.Id">Đặt lại mật khẩu</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@customer.Id">Xem chi tiết</a>
+                </td>
+                <td>
+                    <form asp-action="ToggleLock" method="post">
+                        <input type="hidden" name="id" value="@customer.Id" />
+                        <button type="submit">
+                            @if (customer.IsLocked)
+                            {
+                                <span>Unlock</span>
+                            }
+                            else
+                            {
+                                <span>Lock</span>
+                            }
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

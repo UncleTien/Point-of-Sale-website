@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/admin.cshtml";
+
+}
+
+@model ReportsViewModel
+
+<!-- Thêm script và style cho datepicker -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Chọn ngày cho trường StartDate
+        $('#startDatePicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true
+        });
+
+        // Chọn ngày cho trường EndDate
+        $('#endDatePicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true
+        });
+    });
+</script>
+
+<h1>Báo cáo từ @Model.StartDate.ToString("dd/MM/yyyy") đến @Model.EndDate.ToString("dd/MM/yyyy")</h1>
+
+<!-- Form chọn ngày -->
+<form asp-action="Reports" method="get">
+    <div class="form-group">
+        <label for="startDatePicker">Từ ngày:</label>
+        <input type="text" id="startDatePicker" name="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <div class="form-group">
+        <label for="endDatePicker">Đến ngày:</label>
+        <input type="text" id="endDatePicker" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Xem báo cáo</button>
+</form>
+
+<!-- Bảng báo cáo -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ngày đặt hàng</th>
+            <th>Số lượng đơn hàng</th>
+            <th>Tổng tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+
+            // Khởi tạo biến tổng hợp
+            decimal totalAmountReceived = 0;
+            int numberOfOrders = 0;
+            int numberOfProducts = 0;
+
+            foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>1</td> <!-- Số lượng đơn hàng, có thể thay đổi tùy theo logic của bạn -->
+                    <td>@order.TotalAmount.ToString("C")</td>
+                </tr>
+
+                // Tính toán giá trị tổng hợp
+                totalAmountReceived += order.TotalAmount;
+                numberOfOrders += 1; // Có thể thay đổi tùy vào cách bạn đếm đơn hàng
+            }
+        }
+
+        <!-- Hiển thị thông tin tổng hợp -->
+        <tr>
+            <td colspan="3">
+                <strong>Tổng cộng</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>Số lượng đơn hàng: @numberOfOrders</td>
+            <td>Tổng tiền nhận được: @totalAmountReceived.ToString("C")</td>
+        </tr>
+    </tbody>
+</table>

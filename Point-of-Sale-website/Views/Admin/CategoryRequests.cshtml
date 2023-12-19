@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/admin.cshtml";
+
+}
+@model List<Category>
+
+@foreach (var category in Model)
+{
+    <div>
+        <h4>@category.Name</h4>
+        <p>Requested by: @category.RequestedBy</p>
+        <p>Requested on: @category.RequestedDate</p>
+        @if (!category.RequestApproved)
+        {
+            <form asp-action="ApproveCategory" asp-route-id="@category.Id">
+                <button type="submit" class="btn btn-success">Approve</button>
+            </form>
+            <form asp-action="RejectCategory" asp-route-id="@category.Id">
+                <button type="submit" class="btn btn-danger">Reject</button>
+            </form>
+        }
+    </div>
+}
