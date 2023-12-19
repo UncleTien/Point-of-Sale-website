@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/StoreOwner.cshtml";
+
+}
+
+@model List<Point_of_Sale_website.Models.Product>
+
+<div class="container mt-5">
+    <h2>Danh sách Sách</h2>
+    <a asp-action="Create" class="btn btn-primary mb-3">Thêm Sách</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tiêu đề</th>
+                <th>Tác giả</th>
+                <th>Mô tả</th>
+                <th>Giá</th>
+                <th>Danh mục</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.Id</td>
+                    <td>@product.Title</td>
+                    <td>@product.Author</td>
+                    <td>@product.Description</td>
+                    <td>@product.Price</td>
+                    <td>
+                        @if (product.Category != null)
+                        {
+                            @product.Category.Name
+                        }
+                        else
+                        {
+                            @("Category Not Set")
+                        }
+                    </td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning">Sửa</a>
+                        <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
