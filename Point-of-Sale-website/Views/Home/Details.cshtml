@@ -1,0 +1,59 @@
+﻿@model UserDetailsViewModel
+
+<h1>Chi tiết khách hàng</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">ID</dt>
+    <dd class="col-sm-10">@Model.User.Id</dd>
+
+    <dt class="col-sm-2">Tên đăng nhập</dt>
+    <dd class="col-sm-10">@Model.User.Username</dd>
+
+    <dt class="col-sm-2">Tên đầy đủ</dt>
+    <dd class="col-sm-10">@Model.User.FullName</dd>
+
+    <dt class="col-sm-2">Email</dt>
+    <dd class="col-sm-10">@Model.User.Email</dd>
+
+    <dt class="col-sm-2">Điện thoại</dt>
+    <dd class="col-sm-10">@Model.User.Phone</dd>
+
+    <dt class="col-sm-2">Giới tính</dt>
+    <dd class="col-sm-10">@Model.User.Gender</dd>
+
+    <dt class="col-sm-2">Đơn hàng</dt>
+    <dd class="col-sm-10">
+        @if (Model.Orders != null && Model.Orders.Any())
+        {
+             <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã đơn hàng</th>
+                    <th>Ngày đặt hàng</th>
+                    <th>Tổng tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.Orders)
+                {
+                    <tr>
+                         <td>
+                                <a asp-action="OrderDetails" asp-route-id="@order.Id">Đơn hàng số @order.Id</a>
+                         </td>
+                        <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                        <td>@order.TotalAmount.ToString("c")</td>
+                    </tr>
+                }
+            </tbody>
+            </table>
+
+        }
+        else
+        {
+            <p>Không có đơn hàng.</p>
+        }
+    </dd>
+</dl>
+
+<!-- Add a back button to navigate back to the list -->
+<a asp-action="Index">Quay lại danh sách</a>

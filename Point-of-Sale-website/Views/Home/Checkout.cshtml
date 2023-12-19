@@ -1,0 +1,88 @@
+﻿@model List<CartItem>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Giỏ hàng của bạn</title>
+    <!-- Add Bootstrap CSS link or include it from your project -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h1>Giỏ hàng của bạn</h1>
+
+        @if (Model != null && Model.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.Price.ToString("c")</td>
+                            <td>@item.Quantity</td>
+                            <td>@(item.Price * item.Quantity)</td>
+                            <td><a asp-controller="Home" asp-action="RemoveFromCart" asp-route-id="@item.ProductId">Xóa</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-right">
+                <h4>Tổng cộng: @Model.Sum(item => item.Price * item.Quantity).ToString("c")</h4>
+
+                <div class="form-group">
+                    <label for="customerId">Chọn khách hàng:</label>
+                    <select class="form-control" id="customerId" name="customerId">
+                        @foreach (var customer in ViewBag.Customers)
+                        {
+                            <option value="@customer.Id">@customer.FullName</option>
+                        }
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="processCheckout()">Thanh toán</button>
+            </div>
+        }
+        else
+        {
+            <p>Giỏ hàng trống.</p>
+        }
+    </div>
+
+    <!-- Add Bootstrap JS and Popper.js scripts or include them from your project -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <script>
+        // JavaScript function to handle the "Thanh toán" button click
+        function processCheckout() {
+            // Get the selected customer ID from the dropdown list
+            var customerId = document.getElementById("customerId").value;
+
+            // Redirect to the ProcessCheckout action with the selected customer ID
+            window.location.href = "/Home/ProcessCheckout?customerId=" + customerId;
+        }
+    </script>
+
+</body>
+</html>

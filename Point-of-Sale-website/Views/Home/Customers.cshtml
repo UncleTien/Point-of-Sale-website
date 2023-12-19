@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_MenuLayout.cshtml";
+
+}
+
+@model List<User>
+
+<h1>Quản lý khách hàng</h1>
+
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên đăng nhập</th>
+            <th>Tên đầy đủ</th>
+            <th>Email</th>
+            <th>Điện thoại</th>
+            <th>Actions</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@customer.Id</td>
+                <td>@customer.Username</td>
+                <td>@customer.FullName</td>
+                <td>@customer.Email</td>
+                <td>@customer.Phone</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@customer.Id">Xem chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
